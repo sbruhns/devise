@@ -67,7 +67,8 @@ class Devise::SessionsController < DeviseController
   end
 
   def all_signed_out?
-    users = Devise.mappings.keys.map { |s| warden.user(scope: s, run_callbacks: false) }
+    scopes = Devise.sign_out_all_scopes ? Devise.mappings.keys : [resource_name]
+    users = scopes.map { |s| warden.user(scope: s, run_callbacks: false) }
 
     users.all?(&:blank?)
   end
